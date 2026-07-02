@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/((?!api/|uploads/).*)",
+      "destination": "/client/index.html"
+    }
+  ]
+}
