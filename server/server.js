@@ -18,10 +18,14 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 dotenv.config();
 
 // Connect to Database
-connectDB();
+// connectDB();
+
+if (process.env.NODE_ENV !== "test") {
+  connectDB();
+}
 
 const app = express();
-
+app.set('trust proxy', 1);
 // Security Headers (Helmet)
 app.use(helmet());
 
