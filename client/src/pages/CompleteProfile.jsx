@@ -35,7 +35,7 @@ const CompleteProfile = () => {
     try {
       const { data } = await api.put('/api/auth/complete-profile', { phone });
       showToast('Mobile number verified successfully!', 'success');
-      
+
       // Update local storage and auth context state
       const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
       const updatedUser = { ...userInfo, ...data };

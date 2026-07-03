@@ -6,10 +6,17 @@
   html {
     scroll-behavior: smooth;
   }
+
   body {
     @apply font-sans antialiased selection:bg-indigo-500/30 selection:text-indigo-900 dark:selection:bg-indigo-500/40 dark:selection:text-white;
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-display;
   }
 }
@@ -35,9 +42,12 @@
 
 /* Hero gradient animation */
 @keyframes pulseGlow {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.15;
   }
+
   50% {
     opacity: 0.35;
   }
@@ -75,6 +85,7 @@ input[type="search"]::-webkit-search-cancel-button {
     opacity: 0;
     transform: translateY(-8px) scale(0.97);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);

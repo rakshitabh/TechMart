@@ -2,13 +2,29 @@ import nodemailer from 'nodemailer';
 
 const sendEmail = async (options) => {
   // Create transporter using SMTP credentials from environment
+  // const transporter = nodemailer.createTransport({
+  //   host: process.env.BREVO_SMTP_HOST || 'smtp-relay.brevo.com',
+  //   port: parseInt(process.env.BREVO_SMTP_PORT || '587', 10),
+  //   secure: (process.env.BREVO_SMTP_PORT === '465'), // true for 465 (SSL), false for other ports (TLS)
+  //   auth: {
+  //     user: process.env.BREVO_SMTP_USER || 'a1cf09001@smtp-brevo.com',
+  //     pass: process.env.BREVO_SMTP_PASS,
+  //   },
+  // });
+
   const transporter = nodemailer.createTransport({
-    host: process.env.BREVO_SMTP_HOST || 'smtp-relay.brevo.com',
-    port: parseInt(process.env.BREVO_SMTP_PORT || '587', 10),
-    secure: (process.env.BREVO_SMTP_PORT === '465'), // true for 465 (SSL), false for other ports (TLS)
+    host: process.env.BREVO_SMTP_HOST,
+    port: Number(process.env.BREVO_SMTP_PORT),
+    secure: false,          // Always false for port 587
+    requireTLS: true,
+
     auth: {
-      user: process.env.BREVO_SMTP_USER || 'a1cf09001@smtp-brevo.com',
+      user: process.env.BREVO_SMTP_USER,
       pass: process.env.BREVO_SMTP_PASS,
+    },
+
+    tls: {
+      rejectUnauthorized: false,
     },
   });
 

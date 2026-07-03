@@ -20,7 +20,7 @@ const addAddress = async (req, res, next) => {
 
   try {
     const addressCount = await Address.countDocuments({ userId: req.user._id });
-    
+
     // If first address, make it default automatically
     const makeDefault = addressCount === 0 ? true : !!isDefault;
 
@@ -151,7 +151,7 @@ const setDefaultAddress = async (req, res, next) => {
     await Address.updateMany({ userId: req.user._id }, { isDefault: false });
     address.isDefault = true;
     const updatedAddress = await address.save();
-    
+
     res.json(updatedAddress);
   } catch (error) {
     next(error);
