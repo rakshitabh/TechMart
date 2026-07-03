@@ -1,9 +1,16 @@
 import axios from 'axios';
 
+// const api = axios.create({
+//   baseURL: '', // Empty because Vite proxy forwards all /api requests to port 5000 in dev
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+// });
+
 const api = axios.create({
-  baseURL: '', // Empty because Vite proxy forwards all /api requests to port 5000 in dev
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
