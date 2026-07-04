@@ -126,27 +126,6 @@ All routes prefix with `/api`.
 
 ---
 
-## Deployment Instructions
-
-### Backend (Render)
-1. Sign up on [Render](https://render.com).
-2. Click **New** -> **Web Service**.
-3. Link your GitHub repository.
-4. Set Build Command: `npm install`
-5. Set Start Command: `npm start` (make sure directory is pointed to `/server` or set `Root Directory` in Render to `server`).
-6. Set the Environment Variables (`MONGO_URI`, `JWT_SECRET`, etc.) in Render Console.
-
-### Frontend (Vercel)
-1. Sign up on [Vercel](https://vercel.com).
-2. Click **Add New** -> **Project**.
-3. Import your repository.
-4. Set **Root Directory** as `client`.
-5. Vercel automatically detects Vite. Set Build Command: `npm run build`.
-6. Deploy. The `client/vercel.json` file handles rewriting routes, ensuring React Router routes function.
-7. Configure `VITE_API_URL` if you want to bypass the local proxy in production.
-
----
-
 ## CI/CD Pipeline
 
 The GitHub Actions workflow under `.github/workflows/ci-cd.yml` automatically triggers on push to the `main` branch. It:
