@@ -28,24 +28,29 @@ const addOrderItems = async (req, res, next) => {
       throw new Error('Please provide shipping address');
     }
 
-    // Verify stock and update inventory
-    for (const item of products) {
-      const product = await Product.findById(item.product);
-      if (!product) {
-        res.status(404);
-        throw new Error(`Product not found: ${item.name}`);
+    // Verify stock and update inventory atomically with rollback on concurrency failure
+    const deductedItems = [];
+    try {
+      for (const item of products) {
+        const updatedProduct = await Product.findOneAndUpdate(
+          { _id: item.product, stock: { $gte: item.quantity } },
+          { $inc: { stock: -item.quantity } },
+          { new: true, runValidators: true }
+        );
+        if (!updatedProduct) {
+          res.status(400);
+          throw new Error(`Insufficient stock for product: ${item.name}`);
+        }
+        deductedItems.push({ product: item.product, quantity: item.quantity });
       }
-      if (product.stock < item.quantity) {
-        res.status(400);
-        throw new Error(`Insufficient stock for product: ${item.name}`);
+    } catch (error) {
+      // Compensating action: Rollback already deducted stock
+      for (const item of deductedItems) {
+        await Product.findByIdAndUpdate(item.product, {
+          $inc: { stock: item.quantity },
+        });
       }
-    }
-
-    // Process stock subtraction
-    for (const item of products) {
-      await Product.findByIdAndUpdate(item.product, {
-        $inc: { stock: -item.quantity },
-      });
+      throw error;
     }
 
     const order = new Order({

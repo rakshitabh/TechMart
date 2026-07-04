@@ -54,6 +54,11 @@ const productSchema = new mongoose.Schema(
     stock: {
       type: Number,
       required: [true, 'Please add product stock quantity'],
+      min: [0, 'Stock quantity cannot be negative'],
+      validate: {
+        validator: Number.isInteger,
+        message: 'Stock quantity must be an integer',
+      },
       default: 0,
     },
     image: {

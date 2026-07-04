@@ -117,6 +117,11 @@ const AdminProducts = () => {
       return;
     }
 
+    if (Number(stock) < 0 || !Number.isInteger(Number(stock))) {
+      showToast('Stock quantity must be a non-negative integer', 'warning');
+      return;
+    }
+
     setSubmitLoading(true);
     try {
       const formData = new FormData();
@@ -322,9 +327,26 @@ const AdminProducts = () => {
                   </label>
                   <input
                     type="number"
+                    min="0"
+                    step="1"
                     required
                     value={stock}
-                    onChange={(e) => setStock(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '') {
+                        setStock('');
+                        return;
+                      }
+                      const parsed = parseInt(val, 10);
+                      if (!isNaN(parsed) && parsed >= 0) {
+                        setStock(parsed.toString());
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === '-' || e.key === '.' || e.key === '+' || e.key === 'e') {
+                        e.preventDefault();
+                      }
+                    }}
                     placeholder="25"
                     className="block w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-sm focus:outline-none"
                   />

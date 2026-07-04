@@ -120,6 +120,14 @@ const createProduct = async (req, res, next) => {
   try {
     const { name, price, description, category, brand, stock } = req.body;
 
+    if (stock !== undefined) {
+      const stockNum = Number(stock);
+      if (isNaN(stockNum) || stockNum < 0 || !Number.isInteger(stockNum)) {
+        res.status(400);
+        throw new Error('Stock quantity must be a non-negative integer');
+      }
+    }
+
     let imageUrl = '/images/sample.jpg';
     if (req.file) {
       imageUrl = await uploadImage(req.file);
@@ -151,6 +159,14 @@ const createProduct = async (req, res, next) => {
 const updateProduct = async (req, res, next) => {
   try {
     const { name, price, description, category, brand, stock, image } = req.body;
+
+    if (stock !== undefined) {
+      const stockNum = Number(stock);
+      if (isNaN(stockNum) || stockNum < 0 || !Number.isInteger(stockNum)) {
+        res.status(400);
+        throw new Error('Stock quantity must be a non-negative integer');
+      }
+    }
 
     const product = await Product.findById(req.params.id);
 

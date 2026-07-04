@@ -39,6 +39,7 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 import { describe, test, expect, afterAll } from '@jest/globals';
 import { app, server } from '../server.js';
+import Product from '../models/Product.js';
 
 describe('TechMart API Tests', () => {
 
@@ -68,6 +69,50 @@ describe('TechMart API Tests', () => {
 
     expect(res.status).toBe(404);
     expect(res.body.message).toContain('Not Found');
+  });
+
+  test('Product model should reject negative stock quantity', async () => {
+    const product = new Product({
+      name: 'Test Product',
+      description: 'Test Description',
+      category: 'Test Category',
+      brand: 'Test Brand',
+      price: 100,
+      stock: -5,
+      image: '/images/sample.jpg',
+    });
+
+    let error = null;
+    try {
+      await product.validate();
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error).toBeDefined();
+    expect(error.errors.stock.message).toBe('Stock quantity cannot be negative');
+  });
+
+  test('Product model should reject decimal stock quantity', async () => {
+    const product = new Product({
+      name: 'Test Product',
+      description: 'Test Description',
+      category: 'Test Category',
+      brand: 'Test Brand',
+      price: 100,
+      stock: 12.5,
+      image: '/images/sample.jpg',
+    });
+
+    let error = null;
+    try {
+      await product.validate();
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error).toBeDefined();
+    expect(error.errors.stock.message).toBe('Stock quantity must be an integer');
   });
 
 });
